@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(39, 39, 39);
+}
+
+.container {
+    min-width: 320px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    align-items: center;
+    background-color: darkgray;
+    padding-bottom: 20px;
+}
+
+.container .title {
+    width: 100%;
+    text-align: center;
+    background-color: rgb(39, 39, 39);
+    color: white;
+    padding: 20px 0 20px 0 ;
+    margin: 0;
+}
+
+.container h2 {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    text-align: center;
+}
+
+.container .productList {
+    width: 80%;
+    display: grid;
+    grid-gap: 20px;
+    flex-direction: column;
+    grid-template-rows: repeat(11, 1fr);
+    justify-self: center;
+    padding: 20px 0 20px 0;
+    list-style: decimal;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+.container .productList .li {
+    padding: 20px 0px 20px 0;
+    margin: 10px;
+
+}
+
+.form {
+    margin-top: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    width: 50%;
+    justify-self: center;
+}
+  
+.form label {
+    display: block;
+    margin-bottom: 5px;
+}
+  
+.form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+  
+.form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #444; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+  
+.form button:hover {
+    background-color: #141414; 
+}
+
+.buttonsPag {
+    display: flex;
+    justify-content: center;
+}
+
+.buttonPaginate {
+    width: 150px;
+    padding: 10px 20px; 
+    margin: 0 5px; 
+    background-color: #444;
+    border-radius: 30px;
+}
+
+.buttonPaginate a{
+    font-family: 'Open Sans', serif;
+    color: white; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+}
+
+.buttonPaginate:hover {
+    background-color: #660096; 
+}

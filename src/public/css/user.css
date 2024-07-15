@@ -1,0 +1,57 @@
+body {
+    background-color: rgb(39, 39, 39);
+    color: white;
+}
+
+hr {
+    width: 100%;
+}
+
+h1{
+    font-family: 'Open Sans', sans-serif;
+}
+
+a {
+    cursor: pointer;
+    color: #ffffff;
+    transition: color 1s;
+    font-family: 'Open Sans', sans-serif;
+}
+
+label {
+    color: #ffffff;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 10;
+}
+
+a:hover {
+    color: rgb(183, 0, 255);
+}
+
+button {
+    cursor: pointer;
+    margin-top: 5px;
+    color: white;
+    background-color: #4f0074;
+    border-radius: 6px;
+    border: 1px solid;
+    padding: 5px;
+    transition: background-color 1s;
+    font-family: 'Open Sans', sans-serif;
+}
+
+button:hover {
+    background-color: rgb(162, 0, 255);
+}
+
+input {
+    margin-bottom: 5px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

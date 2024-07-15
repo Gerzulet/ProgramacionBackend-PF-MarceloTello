@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="title">
+        <h1>¡Bienvenido al Chat!</h1>
+    </div>
+    <div class="chat">
+        <div class="message-log">
+            <ul id="messageLogs">
+                {{#each messages}}
+                    <li><strong>{{this.user}}</strong>: {{this.message}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="chat-area">
+            <input id="chatBox" placeholder="Escribe tu mensaje...">
+            <button id="sendButton">Enviar</button>
+        </div>
+    </div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>

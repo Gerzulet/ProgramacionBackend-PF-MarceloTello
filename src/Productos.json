@@ -1,0 +1,113 @@
+[
+	{
+		"code": "graap1",
+		"title": "Grabación Apollo",
+		"category": "Grabacion",
+		"description": "2 Sesiones de 2 horas. Mezcla con recortes creativos, transiciones,Fx , etc. Grabado en la interfaz Apollo Twin. Incluye Mezcla y PreMaster general.",
+		"price": 70000,
+		"thumbnail": "Sin imagen",
+		"stock": 3,
+		"id": 1
+	},
+	{
+		"code": "graap2",
+		"title": "Grabacion Apollo Maqueta",
+		"category": "Grabacion",
+		"description": "1 Sesion de 2 horas. Grabado en la interfaz Apollo Twin. Incluye Mezcla en sesion y PreMaster general.La mezcla es solo en las horas de sesión.",
+		"price": 30000,
+		"thumbnail": "Sin imagen",
+		"stock": 2,
+		"id": 2
+	},
+	{
+		"code": "graak1",
+		"title": "Grabación Akai",
+		"category": "Grabacion",
+		"description": "2 Sesiones de 2 horas. Mezcla con recortes creativos, transiciones,Fx , etc. Grabado en la interfaz Akai EIE. Incluye Mezcla y Master general.",
+		"price": 60000,
+		"thumbnail": "Sin imagen",
+		"stock": 3,
+		"id": 3
+	},
+	{
+		"code": "graak2",
+		"title": "Grabacion Akai Maqueta",
+		"category": "Grabacion",
+		"description": "1 Sesion de 2 horas. Grabado en la interfaz Akai EIE. Incluye Mezcla en sesion y PreMaster general.La mezcla es solo en las horas de sesión.",
+		"price": 20000,
+		"thumbnail": "Sin imagen",
+		"stock": 2,
+		"id": 4
+	},
+	{
+		"code": "sonma1",
+		"title": "Master",
+		"category": "Sonido",
+		"description": "Finaliza el proceso de la ingenieria con el master, dandole los ultimos retoques para que el track suene competitivo y este listo para las plataformas digitales.",
+		"price": 15000,
+		"thumbnail": "Sin imagen",
+		"stock": 3,
+		"id": 5
+	},
+	{
+		"code": "sonmezb1",
+		"title": "Mezcla Beat",
+		"category": "Sonido",
+		"description": "Mezcla tus beats para poder embellecer el trabajo hecho por tu beatmaker y conseguir el resultado que tanto esperas.Derecho a 3 Cambios de la mezcla, cualquier cambio extra $10.000 que se terminan sumando 3 arreglos mas con el pago.",
+		"price": 50000,
+		"thumbnail": "Sin imagen",
+		"stock": 5,
+		"id": 6
+	},
+	{
+		"code": "sonmezv1",
+		"title": "Mezcla de Voces",
+		"category": "Sonido",
+		"description": "Mezcla tus voces para poder darle ese color, sonido cálido y comprimido tan buscado en el mercado y que hara relucir aún más tus grabaciones.Derecho a 3 cambios de la mezcla, cualquier cambio extra $10.000 que se terminan sumando 3 arreglos mas con el pago.",
+		"price": 50000,
+		"thumbnail": "Sin imagen",
+		"stock": 4,
+		"id": 7
+	},
+	{
+		"code": "sonmezpr1",
+		"title": "Promo Mezcla+Master de Voz y Beat",
+		"category": "Sonido",
+		"description": "Trabajo de Mezcla y Master de tu canción completa cohesionando todos sus elementos para embellecer el trabajo preproducción. Para que el track suene con el mejor sonido y este listo para las plataformas digitales.",
+		"price": 65000,
+		"thumbnail": "Sin imagen",
+		"stock": 5,
+		"id": 8
+	},
+	{
+		"code": "beap1",
+		"title": "Beat a pedido",
+		"category": "Beats",
+		"description": "Proceso creativo a partir de tu idea. Nos envias una referencia o tu voz ya grabada en alguna maqueta, nos sirve para cohesionar mas el trabajo y asi sea mas compacto. Incluye Mezcla del beat y un PreMaster.",
+		"price": 80000,
+		"thumbnail": "Sin imagen",
+		"stock": 4,
+		"id": 9
+	},
+	{
+		"code": "bedecat1",
+		"title": "Beat de Catalogo",
+		"category": "Beats",
+		"description": "Puedes elegir entre los beats de nuestro catalogo. Incluye Mezcla del beat.",
+		"price": 50000,
+		"thumbnail": "Sin imagen",
+		"stock": 5,
+		"id": 10
+	},
+	{
+		"code": "beeo1",
+		"title": "Beat en Oferta",
+		"description": "Beat de nuestra seccion en oferta",
+		"category": "Beats",
+		"price": 30000,
+		"thumbnail": "Sin imagen",
+		"stock": 5,
+		"id": 11,
+		"status": true
+	}
+]

@@ -1,0 +1,41 @@
+
+<div class="container">
+    {{#if user}}
+        <h2>Bienvenido {{user.first_name}} {{user.last_name}}</h2>
+    {{else}}
+        <h2>Bienvenido Invitado</h2>
+    {{/if}}
+</div>
+<div class="container">
+    <h1 class="title">Productos</h1>
+    {{#if isValid}}
+        <ul class="productList">
+            {{#each products}}
+            <div class="product">
+                <h3>{{title}}</h3>
+                <p>Precio: {{price}}</p>
+                <p>Descripción: {{description}}</p>
+                <p>Disponibles: {{stock}}</p>
+                <button class="add-to-cart" data-product-id="{{_id}}">Agregar al carrito</button>
+            </div>
+            {{/each}}
+        </ul>
+        <hr>
+        <div class="buttonsPag">
+            <div class="buttonPaginate">
+                {{#if hasPrevPage}}
+                    <a href="{{this.prevLink}}"><< Anterior</a>
+                {{/if}}
+            </div>
+            <div class="buttonPaginate">
+                {{#if hasNextPage}}
+                    <a href="{{this.nextLink}}">Siguiente >></a>
+                {{/if}}
+            </div>
+        </div>
+        
+    {{else}}
+       <h2>No hay productos para mostrar</h2>
+    {{/if}}
+</div>
+<script src="/js/index.js"></script>
