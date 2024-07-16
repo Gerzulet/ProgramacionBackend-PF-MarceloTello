@@ -19,9 +19,10 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
+import nodemailer from 'nodemailer';
 
-import cluster from 'cluster';
-import { cpus } from 'os';
+// import cluster from 'cluster';
+// import { cpus } from 'os';
 
 const app = express();
 
@@ -90,23 +91,53 @@ app.get('/loggerTest', (req, res) => {
 });
 
 
-//Cluster
-
-const numeroDeProcesadores = cpus().length;
-if(cluster.isPrimary){
-    console.log("Proceso primario, generando proceso trabajador");
-    for( let i= 0; i<numeroDeProcesadores;i++){
-        cluster.fork()
+//Mailing
+const transport = nodemailer.createTransport({
+    service:'gmail',
+    port:587,
+    auth:{
+        user:'glifemuzik@gmail.com',
+        pass:'rdcb brwx nihz iziv'
     }
-} else {
-    console.log("Al ser un proceso forkeado, no cuento como primario, por lo tanto isPrimary=false. Entonces soy un worker")
-    console.log(`Worker con id:${process.pid} `)
-
-    const app = express();
-
-    app.get('/', (req,res) => {
-        res.send({status:"sucess", message:"Peticion atendida por un proceso worker"})
+})
+app.get('/mail', async(req,res) =>{
+    let result = await transport.sendMail({
+        from:'Coder Tests <glifemuzik@gmail.com>',
+        to:'marcelotellocortez@gmail.com',
+        subject:'Correo de prueba',
+        html:`
+        <div>
+           <h1>Test Correo</h1>
+           <im src="cid:1promo-apollo-full"/>
+        </div>
+        `,
+        attachments:[{
+            filename:'1 promo-apollo-full.png'
+            path:__dirname+'/images/productos/1 promo-apollo-full.png',
+            cid: '1promo-apollo-full'
+        }]
     })
 
-    app.listen(8080,() => console.log("Listening on 8080"))
-}
+})
+
+
+// //Cluster
+
+// const numeroDeProcesadores = cpus().length;
+// if(cluster.isPrimary){
+//     console.log("Proceso primario, generando proceso trabajador");
+//     for( let i= 0; i<numeroDeProcesadores;i++){
+//         cluster.fork()
+//     }
+// } else {
+//     console.log("Al ser un proceso forkeado, no cuento como primario, por lo tanto isPrimary=false. Entonces soy un worker")
+//     console.log(`Worker con id:${process.pid} `)
+
+//     const app = express();
+
+//     app.get('/', (req,res) => {
+//         res.send({status:"sucess", message:"Peticion atendida por un proceso worker"})
+//     })
+
+//     app.listen(8080,() => console.log("Listening on 8080"))
+// }
