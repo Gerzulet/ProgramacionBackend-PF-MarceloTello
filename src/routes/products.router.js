@@ -2,7 +2,7 @@
 import __dirname from '../utils/utils.js';
 import ProductController from '../controllers/productController.js';
 import productModel from '../dao/mongo/models/productModel.js';
-import { auth, isAdmin } from '../middlewares/auth.js';
+import { auth, isAdmin, isAdminOrOwner, isPremium } from '../middlewares/auth.js';
 
 const router = express.Router();
 const productsRouter = router;
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
         const result = await productModel.paginate(queryOptions, options);
 
         console.log("Productos obtenidos con éxito");
-        res.send(result); // Devuelve la respuesta paginada directamente
+        res.send(result); 
     } catch (error) {
         console.error("Error al obtener productos");
         res.status(500).send('Error al obtener los productos', error);
@@ -61,7 +61,7 @@ router.get('/:id', async (req, res) => {
     
 });
 
-router.post('/',auth, isAdmin, async (req, res) => {
+router.post('/',auth, isPremium, async (req, res) => {
 
     const product = req.body;
 
@@ -88,7 +88,7 @@ router.put('/:id', auth, isAdmin, async (req, res) => {
     }
 });
 
-router.delete('/:id', auth, isAdmin, async (req, res) => {
+router.delete('/:id', isAdminOrOwner, async (req, res) => {
     const productId = req.params.id;
     
     try {
@@ -100,7 +100,7 @@ router.delete('/:id', auth, isAdmin, async (req, res) => {
     }
 });
 
-router.post('/deleteproduct', auth, isAdmin, async (req, res) => {
+router.post('/deleteproduct', isAdminOrOwner, async (req, res) => {
     const productId = req.body.productId;
 
     try {

@@ -42,7 +42,11 @@ const productSchema = mongoose.Schema({
     type:Boolean,
     required: false,
     default:true
-  }
+  },
+  owner: {
+    type: String, 
+    default: "admin"
+}
 
 });
 

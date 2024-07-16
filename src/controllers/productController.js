@@ -9,20 +9,23 @@ export default class ProductController {
         this.productService = ProductsService;
     }
 
-    async add(product) {
+    async add(product, user) {
         const { title, description, code, price, stock, category, thumbnails } = product;
 
         if (!title || !code || !category || !price) {
-            CustomError.createError({
+            throw CustomError.createError({
                 name: "Campos requeridos faltantes",
                 message: EErrors.MISSING_REQUIRED_FIELDS.message,
                 statusCode: EErrors.MISSING_REQUIRED_FIELDS.statusCode,
-                cause: generateProductErrorInfo({title, code, category, price})
+                cause: generateProductErrorInfo({ title, code, category, price })
             });
         }
 
         try {
-            return await this.productService.addProduct({ title, description, code, price, stock, category, thumbnails: thumbnails ?? [] });
+            const owner = user.role === 'premium' ? user.email : 'admin';
+            const productData = { title, description, code, price, stock, category, thumbnails: thumbnails ?? [], owner };
+
+            return await this.productService.add(productData);
         } catch (error) {
             throw CustomError.createError({
                 name: "Error al agregar producto",

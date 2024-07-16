@@ -3,9 +3,13 @@ import productModel from './models/productModel.js';
 export default class ProductService {
 
     async add(product) {
-        const result = await productModel.create(product);
-
-        return result;
+        try {
+            const result = await productModel.create(product);
+            return result;
+        } catch (error) {
+            console.error("Error al agregar producto:", error);
+            throw new Error("Error al agregar producto");
+        }
     }
     
     async getAll() {
