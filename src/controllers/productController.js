@@ -14,7 +14,7 @@ export default class ProductController {
 
         if (!title || !code || !category || !price) {
             throw CustomError.createError({
-                name: "Campos requeridos faltantes",
+                name: "Campos requer idos faltantes",
                 message: EErrors.MISSING_REQUIRED_FIELDS.message,
                 statusCode: EErrors.MISSING_REQUIRED_FIELDS.statusCode,
                 cause: generateProductErrorInfo({ title, code, category, price })

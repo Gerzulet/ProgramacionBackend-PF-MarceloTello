@@ -1,9 +1,12 @@
 import {Router} from 'express';
 import passport from 'passport';
+import jwt from 'jsonwebtoken';
 
 import UserDTO from '../dao/DTOs/user.dto.js';
-import { auth } from '../middlewares/auth.js';
+import { auth, isAdmin } from '../middlewares/auth.js';
 import UserController from '../controllers/userController.js';
+import userModel from '../dao/mongo/models/userModel.js';
+import { generateToken, PRIVATE_KEY } from '../utils/utils.js';
 
 const router = Router();
 const usersRouter = router;
@@ -48,7 +51,7 @@ router.get('/current', auth, async (req, res) => {
     }
 });
 
-router.post('/premium/:uid', auth.isAdmin, async (req, res) => {
+router.post('/premium/:uid', auth, isAdmin, async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userModel.findById(userId);
@@ -63,6 +66,48 @@ router.post('/premium/:uid', auth.isAdmin, async (req, res) => {
         res.status(200).json({ message: `Rol cambiado a ${user.role}` });
     } catch (error) {
         res.status(500).json({ message: 'Error al cambiar el rol del usuario' });
+    }
+});
+
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await userModel.findOne({ email });
+
+        if (!user) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+
+        const token = generateToken({ email: user.email });
+
+        res.send('Correo de reseteo de contraseña enviado');
+    } catch (error) {
+        console.error("Error al enviar el correo de reseteo de contraseña:", error);
+        res.status(500).send('Error al enviar el correo de reseteo de contraseña');
+    }
+});
+
+router.post('/reset-password/:token', async (req, res) => {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    try {
+        const decoded = jwt.verify(token, PRIVATE_KEY);
+
+        const user = await userModel.findOne({ email: decoded.user.email });
+
+        if (!user) {
+            return res.status(400).send('Usuario no encontrado');
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        res.send('Contraseña actualizada correctamente');
+    } catch (error) {
+        console.error("Error al resetear la contraseña:", error);
+        return res.status(400).send('Token inválido o expirado');
     }
 });
 

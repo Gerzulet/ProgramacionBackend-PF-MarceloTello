@@ -5,7 +5,7 @@ const __dirname = dirname(__filename);
 
 import jwt from "jsonwebtoken";
 
-const PRIVATE_KEY = "CoderKeySecretShhh"
+const PRIVATE_KEY = "CoderKeySecretShhh";
 
 const generateToken = (user) => {
     const token = jwt.sign(
@@ -25,7 +25,7 @@ const authToken = (req, res, next) => {
         });
     }
 
-    const token = authHeader.split(" ")[1]; //Remove string "Bearer"
+    const token = authHeader.split(" ")[1];
     jwt.verify(token, PRIVATE_KEY, (error, credentials) => {
         if (error) {
             return res.status(403).send(
@@ -42,7 +42,8 @@ const authToken = (req, res, next) => {
 
 export {
     generateToken,
-    authToken
+    authToken,
+    PRIVATE_KEY
 }
 
 export default __dirname;

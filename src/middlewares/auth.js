@@ -15,28 +15,28 @@ export const logged = function (req, res, next) {
 }
 
 export const isAdmin = (req, res, next) => {
-    if (req.user && req.user.role === 'admin') {
+    if (req.session.user && req.session.user.role === 'admin') {
         return next();
     }
     return res.status(403).send('No tienes permisos para realizar esta acción.');
 };
 
 export const isUser = (req, res, next) => {
-    if (req.user && req.user.role === 'user') {
+    if (req.session.user && req.session.user.role === 'user') {
         return next();
     }
     return res.status(403).send('No tienes permisos para realizar esta acción.');
 };
 
 export const isPremium = (req, res, next) => {
-    if (req.user && req.user.role === 'premium') {
+    if (req.session.user && req.session.user.role === 'premium') {
         return next();
     }
     return res.status(403).send('No tienes permisos para realizar esta acción.');
 };
 
 export const isAdminOrOwner = async (req, res, next) => {
-    const user = req.user;
+    const user = req.session.user;
     const productId = req.params.id;
 
     try {

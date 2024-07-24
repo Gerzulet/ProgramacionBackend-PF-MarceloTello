@@ -3,6 +3,7 @@ import crypto from 'crypto';
 
 import config from '../config.js';
 import userModel from '../dao/mongo/models/userModel.js'; 
+import __dirname from '../utils/utils.js';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',

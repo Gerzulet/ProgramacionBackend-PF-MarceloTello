@@ -61,9 +61,15 @@ router.get('/:id', async (req, res) => {
     
 });
 
-router.post('/',auth, isPremium, async (req, res) => {
-
+router.post('/',auth, isAdmin, isPremium, async (req, res) => {
+    const user = req.session.user;
     const product = req.body;
+
+    if (user.role === 'admin') {
+        product.owner = 'admin';
+    } else if (user.role === 'premium') {
+        product.owner = user.email; 
+    }
 
     try {
         await PC.add(product);
@@ -88,8 +94,9 @@ router.put('/:id', auth, isAdmin, async (req, res) => {
     }
 });
 
-router.delete('/:id', isAdminOrOwner, async (req, res) => {
+router.delete('/:id', auth, isAdmin, async (req, res) => {
     const productId = req.params.id;
+    const user = req.session.user;
     
     try {
         await PC.delete(productId);
@@ -100,8 +107,9 @@ router.delete('/:id', isAdminOrOwner, async (req, res) => {
     }
 });
 
-router.post('/deleteproduct', isAdminOrOwner, async (req, res) => {
+router.post('/deleteproduct', auth, isAdmin, async (req, res) => {
     const productId = req.body.productId;
+    const user = req.session.user;
 
     try {
         await PC.delete(productId);

@@ -163,11 +163,18 @@ router.get("/register", (req, res) => {
 });
 
 router.get('/forgot-password', (req, res) => {
-    res.render('forgot-password');
+    res.render('forgot-password', {
+        title: 'Forgot Password',
+        style: 'forgot-password.css'
+    });
 });
   
 router.get('/reset-password/:token', (req, res) => {
-    res.render('reset-password', { token: req.params.token });
+    res.render('reset-password', {
+        title: 'Reset Password',
+        style: 'reset-password.css',
+        token: req.params.token
+    });
 });
   
 
