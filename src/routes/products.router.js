@@ -2,7 +2,7 @@
 import __dirname from '../utils/utils.js';
 import ProductController from '../controllers/productController.js';
 import productModel from '../dao/mongo/models/productModel.js';
-import { auth, isAdmin, isAdminOrOwner, isPremium } from '../middlewares/auth.js';
+import { auth, isAdmin, isPremium, isAdminOrOwner } from '../middlewares/auth.js';
 
 const router = express.Router();
 const productsRouter = router;
@@ -94,11 +94,16 @@ router.put('/:id', auth, isAdmin, async (req, res) => {
     }
 });
 
-router.delete('/:id', auth, isAdmin, async (req, res) => {
+router.delete('/:id', auth, isAdminOrOwner, async (req, res) => {
     const productId = req.params.id;
-    const user = req.session.user;
     
     try {
+        const product = await PC.getByID(productId);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Producto no encontrado'})
+        }
+
         await PC.delete(productId);
         res.send('Producto eliminado correctamente');
     } catch (error) {
