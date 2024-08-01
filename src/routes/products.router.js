@@ -2,7 +2,7 @@
 import __dirname from '../utils/utils.js';
 import ProductController from '../controllers/productController.js';
 import productModel from '../dao/mongo/models/productModel.js';
-import { auth, isAdmin, isPremium, isAdminOrOwner } from '../middlewares/auth.js';
+import { auth, isAdmin, isPremium, isAdminOrOwner, isAdminOrPremium } from '../middlewares/auth.js';
 
 const router = express.Router();
 const productsRouter = router;
@@ -61,15 +61,11 @@ router.get('/:id', async (req, res) => {
     
 });
 
-router.post('/',auth, isAdmin, isPremium, async (req, res) => {
+router.post('/',auth, isAdminOrPremium, async (req, res) => {
     const user = req.session.user;
     const product = req.body;
 
-    if (user.role === 'admin') {
-        product.owner = 'admin';
-    } else if (user.role === 'premium') {
-        product.owner = user.email; 
-    }
+    product.owner = user.role === 'admin' ? 'admin' : user.email;
 
     try {
         await PC.add(product);

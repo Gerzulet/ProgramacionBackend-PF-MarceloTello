@@ -41,6 +41,9 @@ export const isAdminOrOwner = async (req, res, next) => {
 
     try {
         const product = await ProductsService.getById(productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
         if (user.role === 'admin' || product.owner === user.email) {
             return next();
         } else {
@@ -51,4 +54,18 @@ export const isAdminOrOwner = async (req, res, next) => {
     }
 };
 
-export default { auth, logged, isAdmin, isUser, isPremium, isAdminOrOwner };
+export const isAdminOrPremium = (req, res, next) => {
+    const user = req.session.user;
+
+    if (!user) {
+        return res.status(403).send('No tienes permisos para realizar esta acción.');
+    }
+
+    if (user.role === 'admin' || user.role === 'premium') {
+        return next();
+    }
+
+    return res.status(403).send('No tienes permisos para realizar esta acción.');
+};
+
+export default { auth, logged, isAdmin, isUser, isPremium, isAdminOrOwner, isAdminOrPremium };

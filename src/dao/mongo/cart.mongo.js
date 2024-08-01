@@ -1,5 +1,6 @@
 import cartModel from "./models/cartModel.js";
 import productModel from "./models/productModel.js";
+import mongoose from "mongoose";
 
 export default class CartService {
 
@@ -16,24 +17,32 @@ export default class CartService {
 
     async addProduct(cartId, productId, quantity) {
         try {
+            console.log('Cart ID:', cartId);
+            console.log('Product ID:', productId);
+            console.log('Quantity:', quantity);
+        
             const product = await productModel.findById(productId);
             if (!product) {
                 console.error(`El producto con ID ${productId} no existe`);
                 return;
             }
-    
+        
+            console.log('Product found:', product);
+        
             const result = await cartModel.updateOne(
-                { _id: cartId },
-                { $addToSet: { products: { product: productId, quantity } } }
+                { _id: cartId, 'products.product': productId },
+                { $inc: { 'products.$.quantity': quantity } }
             );
-    
+        
+            console.log('Update result:', result);
+        
             if (result.nModified === 0) {
                 await cartModel.updateOne(
-                    { _id: cartId, 'products.product': productId },
-                    { $inc: { 'products.$.quantity': quantity } }
+                    { _id: cartId },
+                    { $addToSet: { products: { product: productId, quantity } } }
                 );
             }
-    
+        
             console.log("Producto agregado al carrito");
         } catch (error) {
             console.error("Error al agregar el producto al carrito", error);
@@ -52,12 +61,12 @@ export default class CartService {
     async getById(cartId) {
         try {
             const cart = await cartModel.findOne({_id: cartId}).populate('products.product');
-
+    
             if (!cart) {
-                console.error("No se encontro este carrito");
+                console.error("No se encontró este carrito");
                 return null;
             } else {
-                console.log(`Se encontro el carrito con el id ${cartId}`)
+                console.log(`Se encontró el carrito con el id ${cartId}`);
             }
             
             return cart;

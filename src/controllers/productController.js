@@ -9,7 +9,7 @@ export default class ProductController {
         this.productService = ProductsService;
     }
 
-    async add(product, user) {
+    async add(product) {
         const { title, description, code, price, stock, category, thumbnails } = product;
 
         if (!title || !code || !category || !price) {

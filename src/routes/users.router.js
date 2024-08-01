@@ -94,9 +94,15 @@ router.post('/reset-password/:token', async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, PRIVATE_KEY);
+        const tokenDate = decoded.createdAt;
+        const currentTime = new Date.now();
+        
+        const tokenFindOut = (currentTime - tokenDate) / (1000 * 60);
+        if (tokenFindOut > 60 ) {
+            return res.status(400).send('Token de restablecimiento de password caducado');
+        }
 
         const user = await userModel.findOne({ email: decoded.user.email });
-
         if (!user) {
             return res.status(400).send('Usuario no encontrado');
         }

@@ -30,6 +30,10 @@ const userSchema = mongoose.Schema({
         default: "user",
         enum: ["user", "admin", "premium"] 
     },
+    cartId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'carts' 
+    },
     resetPasswordToken: {
         type: String,
     },
