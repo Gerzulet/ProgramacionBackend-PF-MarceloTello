@@ -4,6 +4,27 @@ body {
     background-color: rgb(39, 39, 39);
 }
 
+.buttonCart {
+    width: 80px;
+    padding: 5px 20px; 
+    margin: 5px; 
+    background-color: #444;
+    border-radius: 30px;
+    justify-self: center;
+}
+
+.buttonCart a{
+    font-family: 'Open Sans', serif;
+    color: white; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+}
+
+.buttonCart:hover {
+    background-color: #660096; 
+}
+
 .container {
     min-width: 320px;
     width: 100%;

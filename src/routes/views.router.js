@@ -49,7 +49,8 @@ router.get('/', auth, async (req, res) => {
             products: result.docs,
             style: 'index.css',
             ...result,
-            user: req.session.user
+            user: req.session.user,
+            cartId: req.session.user.cartId
         });
     } catch (error) {
         console.error("Error al obtener productos", error);

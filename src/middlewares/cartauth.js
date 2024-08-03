@@ -1,22 +1,33 @@
 import cartModel from "../dao/mongo/models/cartModel.js";
 import userModel from "../dao/mongo/models/userModel.js";
 
+import UserController from "../controllers/userController.js";
+import CartController from "../controllers/cartController.js";
+
+const UC = new UserController();
+const CC = new CartController();
+
 async function getCartId(req, res, next) {
     try {
         if (req.isAuthenticated()) { 
-            const user = await userModel.findById(req.user._id);
+            const uid = req.user._id;
+            const user = await UC.getById(uid);
+
             if (user && user.cartId) {
                 req.cartId = user.cartId;
             } else {
-                const newCart = await cartModel.create({ products: [] });
+                const newCart = await CC.create();
                 user.cartId = newCart._id;
                 await user.save();
-                req.user.cartId = newCart._id;
+                req.cartId = newCart._id;
             }
         } else {
             if (!req.cookies.cartId) {
-                const newCart = await cartModel.create({ products: [] });
+                const newCart = await CC.create();
                 res.cookie('cartId', newCart._id, { httpOnly: true, secure: true });
+                req.cartId = newCart._id;
+            } else {
+                req.cartId = req.cookies.cartId;
             }
         }
         next();
