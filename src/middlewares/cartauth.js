@@ -1,6 +1,3 @@
-import cartModel from "../dao/mongo/models/cartModel.js";
-import userModel from "../dao/mongo/models/userModel.js";
-
 import UserController from "../controllers/userController.js";
 import CartController from "../controllers/cartController.js";
 

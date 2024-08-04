@@ -1,5 +1,4 @@
-import express from 'express';
-import handlebars from 'express-handlebars';
+
 import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
 import chatRouter from './routes/chat.router.js';
@@ -15,6 +14,9 @@ import { addLogger } from './utils/logger.js';
 import logger from './utils/logger.js';
 import getCartId from './middlewares/cartauth.js';
 
+import express from 'express';
+import handlebars from 'express-handlebars';
+import exphbs from 'express-handlebars'
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
@@ -42,7 +44,17 @@ mongoose.connection.on('error', (err) => {
 });
 
 // Handlebars Config
-app.engine('handlebars', handlebars.engine());
+const hbs = exphbs.create({
+    defaultLayout: 'main',
+    helpers: {
+        // tus helpers personalizados
+    },
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    },
+});
+app.engine('handlebars', hbs.engine);
 app.set('views', __dirname + '/../views');
 app.set('view engine', 'handlebars');
 
@@ -71,19 +83,19 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(getCartId);
 
-// const swaggerOptions = {
-//     definition:{
-//         openapi:'3.0.1',
-//         info:{
-//             title:"Ecommerce CoderHouse",
-//             description:"Ecommerce de un Estudio Musical"
-//         }
-//     },
-//     apsis:[`${__dirname}/docs/**/*.yaml`]
-// }
+const swaggerOptions = {
+    definition:{
+        openapi:'3.0.1',
+        info:{
+            title:"Ecommerce CoderHouse",
+            description:"Ecommerce de un Estudio Musical"
+        }
+    },
+    apis:[`${__dirname}/docs/**/*.yaml`]
+}
 
-// const specs = swaggerJSDoc(swaggerOptions);
-// app.use('/apidocs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs))
+const specs = swaggerJSDoc(swaggerOptions);
+app.use('/apidocs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs))
 
 // Routers
 app.use('/', viewsRouter);

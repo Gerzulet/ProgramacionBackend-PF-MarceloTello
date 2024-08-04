@@ -5,7 +5,6 @@ import CartController from "../controllers/cartController.js"
 import { auth, isUser } from "../middlewares/auth.js";
 
 
-
 const router = express.Router();
 const cartsRouter = router;
 
@@ -18,7 +17,7 @@ router.post("/", async (req, res) => {
             return res.status(500).json({ error: "No se pudo crear el carrito" });
         }
 
-        req.session.cartId = newCart._id;
+        req.cartId = newCart._id;
         if (req.user) {
             req.user.cartId = newCart._id;
             await req.user.save();
@@ -33,7 +32,7 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
     try {
-        const cartId = req.session.cartId || (req.user && req.user.cartId);
+        const cartId = req.cartId;
         if (!cartId) {
             return res.status(400).json({ error: "No se ha encontrado el carrito" });
         }
@@ -53,7 +52,7 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:cid", async (req, res) => {
-    const cartId = req.params.cid || req.session.cartId || (req.user && req.user.cartId);
+    const cartId = req.params.cid || req.cartId ;
 
     try {
         const cart = await CC.getById(cartId);
@@ -62,34 +61,31 @@ router.get("/:cid", async (req, res) => {
             console.error("No se pudo encontrar el carrito con ID:", cartId);
             return res.status(404).json({ error: `No se encontró el carrito con ID ${cartId}` });
         }
-
-        return res.json(cart);
+        //Solucion"own property" de handlebars y seguridad
+        const cartData = JSON.parse(JSON.stringify(cart));
+        return res.render('cart', { cart: cartData });
     } catch (error) {
         console.error("Error al obtener el carrito:", error);
         return res.status(500).send("Error interno del servidor");
     }
 });
 
-router.post("/:cid/product/:pid", async (req, res) => {
-    const cartId = req.params.cid || req.cartId; 
+router.post('/:cid/product/:pid', async (req, res) => {
+    const cartId = req.params.cid;
     const productId = req.params.pid;
     const { quantity } = req.body;
 
-    if (!cartId || !productId || typeof quantity !== 'number') {
-        return res.status(400).json({ error: "Faltan datos necesarios: cartId, productId o quantity" });
-    }
-
     try {
-        await CC.addProduct(cartId, productId, quantity); 
-        res.status(200).send('Producto agregado al carrito');
+        await CC.addProduct(cartId, productId, quantity);
+        res.status(200).json({ message: 'Producto agregado al carrito' });
     } catch (error) {
-        console.error("Error al agregar producto al carrito:", error);
-        res.status(500).json({ error: "Error al agregar producto al carrito" });
+        console.error('Error al agregar producto al carrito:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 
 router.delete('/:cid/product/:pid', async (req, res) => {
-    const cartId = req.params.cid || req.session.cartId || (req.user && req.user.cartId);
+    const cartId = req.params.cid || req.cartId ;
     const productId = req.params.pid;
 
     try {
@@ -102,7 +98,7 @@ router.delete('/:cid/product/:pid', async (req, res) => {
 });
 
 router.put('/:cid/products/:pid', async (req, res) => {
-    const cartId = req.params.cid || req.session.cartId || (req.user && req.user.cartId);
+    const cartId = req.params.cid || req.cartId ;
     const productId = req.params.pid;
     const { quantity } = req.body;
 
@@ -116,7 +112,7 @@ router.put('/:cid/products/:pid', async (req, res) => {
 });
 
 router.put('/:cid', async (req, res) => {
-    const cartId = req.params.cid || req.session.cartId || (req.user && req.user.cartId);
+    const cartId = req.params.cid || req.cartId ;
     const { products } = req.body;
 
     try {
@@ -129,7 +125,7 @@ router.put('/:cid', async (req, res) => {
 });
 
 router.delete('/:cid', async (req, res) => {
-    const cartId = req.params.cid || req.session.cartId || (req.user && req.user.cartId);
+    const cartId = req.params.cid || req.cartId ;
 
     try {
         await CC.removeAllProducts(cartId);
@@ -142,7 +138,7 @@ router.delete('/:cid', async (req, res) => {
 
 router.post('/:cid/purchase', auth, isUser, async (req, res) => {
     try {
-        const cartId = req.params.cid || req.session.cartId || (req.user && req.user.cartId);
+        const cartId = req.params.cid || req.cartId ;
         const userEmail = req.user.email;
 
         if (!cartId) {
@@ -156,5 +152,23 @@ router.post('/:cid/purchase', auth, isUser, async (req, res) => {
         res.status(500).send(error.message);
     }
 });
+
+router.get('/current', auth, async (req, res) => {
+    try {
+        const cartId = req.session.user.cartId || req.cartId;
+        const cart = await CC.getById(cartId);
+
+        if (!cart) {
+            return res.status(404).json({ error: `No se encontró el carrito con ID ${cartId}` });
+        }
+
+        return res.json(cart);
+    } catch (error) {
+        console.error("Error al obtener el carrito:", error);
+        return res.status(500).send("Error interno del servidor");
+    }
+});
+
+
 
 export default cartsRouter;

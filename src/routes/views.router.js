@@ -121,8 +121,7 @@ router.get('/chat', async (req,res) => {
 })
 
 router.get('/cart/:cid', auth, isUser, async (req, res) => {
-    let cartId = req.params.cid;
-
+    let cartId = req.params.cid || req.cartId 
     try {
         let cart = await CC.getById(cartId);
         if (!cart) {

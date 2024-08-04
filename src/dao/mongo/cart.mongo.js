@@ -20,29 +20,32 @@ export default class CartService {
             console.log('Cart ID:', cartId);
             console.log('Product ID:', productId);
             console.log('Quantity:', quantity);
-        
+    
+            // Verificar si el producto existe en la base de datos
             const product = await productModel.findById(productId);
             if (!product) {
                 console.error(`El producto con ID ${productId} no existe`);
                 return;
             }
-        
+    
             console.log('Product found:', product);
-        
+    
+            // Intentar incrementar la cantidad del producto en el carrito si ya existe
             const result = await cartModel.updateOne(
                 { _id: cartId, 'products.product': productId },
                 { $inc: { 'products.$.quantity': quantity } }
             );
-        
+    
             console.log('Update result:', result);
-        
-            if (result.nModified === 0) {
+    
+            if (result.matchedCount === 0) {
+                // Si no se encontró el producto en el carrito, agregarlo
                 await cartModel.updateOne(
                     { _id: cartId },
                     { $addToSet: { products: { product: productId, quantity } } }
                 );
             }
-        
+    
             console.log("Producto agregado al carrito");
         } catch (error) {
             console.error("Error al agregar el producto al carrito", error);

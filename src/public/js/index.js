@@ -1,5 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (req, res) => {
     let cartId = localStorage.getItem('cartId');
+    
 
     if (!cartId) {
         async function createCart() {
