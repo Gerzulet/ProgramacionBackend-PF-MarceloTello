@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const cartId = getCartIdURL();
-    const cartContainer = document.querySelector('.cartProducts');
+    const cartContainer = document.querySelector('.container');
 
     try {
         const response = await fetch(`/api/carts/${cartId}`);
@@ -12,16 +12,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (cart && cart.products.length > 0) {
             const productList = document.createElement('ul');
-            cart.products.forEach(item => {
+            cart.products.forEach(product => {
                 const listItem = document.createElement('li');
-                listItem.textContent = `${item.product.title}: ${item.quantity}`;
+                listItem.textContent = `${product.product.title}: ${product.quantity}`;
 
                 // Botón para eliminar el producto
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Eliminar';
                 removeButton.addEventListener('click', async () => {
-                    await removeProductFromCart(item.product._id);
-                    window.location.reload();
+                    await removeProductFromCart(product.product._id);
+                    
                 });
                 listItem.appendChild(removeButton);
 
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             removeAllButton.textContent = 'Eliminar todos';
             removeAllButton.addEventListener('click', async () => {
                 await removeAllProductsFromCart();
-                window.location.reload();
+                
             });
             cartContainer.appendChild(removeAllButton);
         } else {
@@ -81,4 +81,4 @@ function getCartIdURL() {
     const url = window.location.href;
     const parts = url.split('/');
     return parts[parts.length - 1]; // Devuelve la última parte de la URL, que debería ser el cartId
-}
+} 

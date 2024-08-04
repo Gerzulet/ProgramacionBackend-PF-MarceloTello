@@ -7,7 +7,7 @@ const MC = new MessageController();
 
 //Funcion para Actualizacion de Productos en tiempo real
 const socketUpdatedProducts = async (socket) => {
-    const products = await PC.getProducts();
+    const products = await PC.getAll();
     socket.emit('productList',products);
     console.log("Productos Actualizados en tiempo real")
 }
@@ -29,12 +29,11 @@ export default (io) => {
 
         socket.on('messageChat', async (data) => {
             try {
-                const newMessage = await MC.addMessage(data.user, data.message);
-                const messages = await MC.getAllMessages();
+                const newMessage = await MC.add(data.user, data.message);
+                const messages = await MC.getAll();
                 io.emit('messageLogs', messages);
             } catch (error) {
-                console.error("Error al guardar el mensaje");
-                res.status(500).send('Error al eliminar el producto del carrito', error);
+                console.error("Error al guardar el mensaje",error);
             }
         });
     })

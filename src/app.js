@@ -13,6 +13,7 @@ import errorHandler from './middlewares/errors/index.js';
 import { addLogger } from './utils/logger.js';
 import logger from './utils/logger.js';
 import getCartId from './middlewares/cartauth.js';
+import specs from './config/swagger.config.js'
 
 import express from 'express';
 import handlebars from 'express-handlebars';
@@ -23,11 +24,7 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
-import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express'
-
-
-
 import cluster from 'cluster';
 import { cpus } from 'os';
 
@@ -83,20 +80,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(getCartId);
 
-const swaggerOptions = {
-    definition:{
-        openapi:'3.0.1',
-        info:{
-            title:"Ecommerce CoderHouse",
-            description:"Ecommerce de un Estudio Musical"
-        }
-    },
-    apis:[`${__dirname}/docs/**/*.yaml`]
-}
-
-const specs = swaggerJSDoc(swaggerOptions);
-app.use('/apidocs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs))
-
 // Routers
 app.use('/', viewsRouter);
 app.use('/api/products', productsRouter);
@@ -104,6 +87,7 @@ app.use('/api/carts', cartsRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/sessions', usersRouter);
 app.use('/api/password-reset', passwordResetRouter );
+app.use('/apidocs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs))
 
 
 const PORT = config.port || 8081;
