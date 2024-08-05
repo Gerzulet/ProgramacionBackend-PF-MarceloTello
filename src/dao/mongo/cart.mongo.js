@@ -1,6 +1,6 @@
 import cartModel from "./models/cartModel.js";
 import productModel from "./models/productModel.js";
-import mongoose from "mongoose";
+ 
 
 export default class CartService {
 

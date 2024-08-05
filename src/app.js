@@ -87,7 +87,7 @@ app.use('/api/carts', cartsRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/sessions', usersRouter);
 app.use('/api/password-reset', passwordResetRouter );
-app.use('/apidocs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs))
+app.use('/api-docs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs))
 
 
 const PORT = config.port || 8081;
