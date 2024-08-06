@@ -1,8 +1,8 @@
 import chai from 'chai' ;
 import mongoose from 'mongoose';
-import UserController from '../controllers/userController.js';
-import UserService from '../dao/mongo/user.mongo.js';
-import config from '../config.js';
+import UserController from '../../controllers/userController.js';
+import UserService from '../../dao/mongo/user.mongo.js';
+import config from '../../config.js';
 
 const expect = chai.expect;
 

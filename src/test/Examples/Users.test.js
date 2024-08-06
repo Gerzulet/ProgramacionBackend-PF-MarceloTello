@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import UserController from "../controllers/userController.js";
-import UserService from "../dao/mongo/user.mongo.js";
+import UserController from "../../controllers/userController.js";
+import UserService from "../../dao/mongo/user.mongo.js";
 import Assert from 'assert';
-import config from "../config.js";
+import config from "../../config.js";
 
 // MongoDB connect
 mongoose.connect(config.mongo_url);
