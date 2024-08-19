@@ -7,6 +7,7 @@ import { auth, isAdmin } from '../middlewares/auth.js';
 import UserController from '../controllers/userController.js';
 import userModel from '../dao/mongo/models/userModel.js';
 import { generateToken, PRIVATE_KEY } from '../utils/utils.js';
+import { sendDeletionEmail } from '../services/emailService.js';
 
 const router = Router();
 const usersRouter = router;
@@ -138,22 +139,32 @@ router.post('/reset-password/:token', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
+router.delete('/', async (req, res) => {
+    const user = req.user
+
     try {
-        const users = await UC.getAll();
+        // Calcula la fecha de inactividad
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - 2);
 
-        if (users && users.length > 0) {
-
-            const usersDTO = users.map(user => new UserDTO(user));
-
-            res.json(usersDTO);
-        } else {
-            res.status(404).json({ message: 'Usuarios no encontrados' });
+        const usersToDelete = await User.find({ lastLogin: { $lt: cutoffDate } }).exec();
+        
+        if (usersToDelete.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron usuarios inactivos para eliminar' });
         }
+
+        // Envía correos electrónicos de notificación
+        await Promise.all(usersToDelete.map(user => sendDeletionEmail(user.email)));
+
+        // Elimina los usuarios inactivos
+        await userModel.deleteMany({ lastLogin: { $lt: cutoffDate } }).exec();
+
+        res.status(200).json({ message: 'Usuarios inactivos eliminados y correos enviados' });
     } catch (error) {
-        console.error('Error al obtener los usuarios:', error);
-        res.status(500).json({ message: 'Error al obtener los usuarios' });
+        console.error('Error al eliminar usuarios inactivos:', error);
+        res.status(500).json({ message: 'Error al eliminar usuarios inactivos' });
     }
 });
+
 
 export default usersRouter;

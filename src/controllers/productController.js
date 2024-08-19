@@ -59,7 +59,8 @@ export default class ProductController {
                     statusCode: EErrors.PRODUCT_NOT_FOUND.statusCode,
                 });
             }
-            return product;
+            // return product;
+            return await productModel.findById(id).populate('owner').lean().exec();
         } catch (error) {
             throw CustomError.createError({
                 name: "Error al obtener producto por ID",

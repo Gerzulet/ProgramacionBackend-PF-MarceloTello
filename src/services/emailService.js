@@ -52,4 +52,30 @@ const sendResetEmail = async (email) => {
   }
 };
 
-export { sendResetEmail };
+const sendDeletionEmail = async (userEmail) => {
+  try {
+      await transporter.sendMail({
+          from: config.email,
+          to: userEmail,
+          subject: 'Cuenta Eliminada por Inactividad ',
+          text: 'Hola, tu cuenta ha sido eliminada debido a inactividad durante los últimos dos días. Si crees que esto es un error, por favor contáctanos.'
+      });
+  } catch (error) {
+      console.error('Error al enviar el correo electrónico:', error);
+  }
+};
+
+const sendProductDeletionEmail = async (userEmail, productName) => {
+  try {
+      await transporter.sendMail({
+          from: config.email,
+          to: userEmail,
+          subject: 'Notificación de Eliminación de Producto',
+          text: `Hola, el producto '${productName}' que pertenecía a tu cuenta ha sido eliminado. Si tienes alguna pregunta, por favor contáctanos.`
+      });
+  } catch (error) {
+      console.error('Error al enviar el correo electrónico:', error);
+  }
+};
+
+export { sendResetEmail, sendDeletionEmail, sendProductDeletionEmail };

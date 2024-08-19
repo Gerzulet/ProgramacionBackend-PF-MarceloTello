@@ -39,7 +39,10 @@ const userSchema = mongoose.Schema({
     },
     resetPasswordExpires: {
         type: Date,
-    }
+    },
+    lastLogin: { 
+        type: Date, 
+        default: Date.now }
 });
 
 export const userModel = mongoose.model(userCollection, userSchema);

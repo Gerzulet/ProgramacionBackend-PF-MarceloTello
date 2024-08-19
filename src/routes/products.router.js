@@ -92,18 +92,23 @@ router.put('/:id', auth, isAdmin, async (req, res) => {
 
 router.delete('/:id', auth, isAdminOrOwner, async (req, res) => {
     const productId = req.params.id;
-    
+
     try {
         const product = await PC.getByID(productId);
-
+        
         if (!product) {
-            return res.status(404).json({ message: 'Producto no encontrado'})
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        
+        if (product.owner && product.owner.role === 'premium') {
+            // Envía el correo al usuario premium
+            await sendProductDeletionEmail(product.owner.email, product.title);
         }
 
         await PC.delete(productId);
         res.send('Producto eliminado correctamente');
     } catch (error) {
-        console.error("Error al eliminar el producto:");
+        console.error('Error al eliminar el producto:', error);
         res.status(500).send('Error al eliminar el producto', error);
     }
 });
