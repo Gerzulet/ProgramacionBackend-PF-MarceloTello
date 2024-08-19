@@ -54,13 +54,19 @@ router.get('/current', auth, async (req, res) => {
 router.post('/premium/:uid', auth, isAdmin, async (req, res) => {
     try {
         const userId = req.params.uid;
+        const { role } = req.body; // Obtener el rol enviado en el cuerpo de la solicitud
+
+        if (!['admin', 'user', 'premium'].includes(role)) {
+            return res.status(400).json({ message: 'Rol inválido' });
+        }
+
         const user = await userModel.findById(userId);
 
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado' });
         }
 
-        user.role = user.role === 'premium' ? 'user' : 'premium';
+        user.role = role; // Establecer el nuevo rol
         await user.save();
 
         res.status(200).json({ message: `Rol cambiado a ${user.role}` });
@@ -133,7 +139,6 @@ router.post('/reset-password/:token', async (req, res) => {
     }
 });
 
-
 router.get('/', auth, isAdmin, async (req, res) => {
     try {
         const users = await UC.getAll();
@@ -148,9 +153,5 @@ router.get('/', auth, isAdmin, async (req, res) => {
         res.status(500).json({ message: 'Error al obtener los usuarios' });
     }
 });
-
-
-
-
 
 export default usersRouter;

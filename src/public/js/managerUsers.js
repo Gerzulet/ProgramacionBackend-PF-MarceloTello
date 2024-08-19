@@ -5,25 +5,32 @@ document.addEventListener('DOMContentLoaded', () => {
     changeRoleButtons.forEach(button => {
         button.addEventListener('click', async () => {
             const userId = button.getAttribute('data-userid');
-            
-            try {
-                const response = await fetch(`/api/sessions/premium/${userId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+            const roleInput = button.previousElementSibling; 
+            const newRole = roleInput.value.trim(); 
 
-                if (response.ok) {
-                    const data = await response.json();
-                    Swal.fire('Éxito', data.message, 'success').then(() => location.reload());
-                } else {
-                    const data = await response.json();
-                    Swal.fire('Error', data.message || 'Error al cambiar el rol', 'error');
+            if (newRole) {
+                try {
+                    const response = await fetch(`/api/sessions/premium/${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ role: newRole })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        Swal.fire('Éxito', data.message, 'success').then(() => location.reload());
+                    } else {
+                        const data = await response.json();
+                        Swal.fire('Error', data.message || 'Error al cambiar el rol', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error al cambiar el rol:', error);
+                    Swal.fire('Error', 'Error al cambiar el rol', 'error');
                 }
-            } catch (error) {
-                console.error('Error al cambiar el rol:', error);
-                Swal.fire('Error', 'Error al cambiar el rol', 'error');
+            } else {
+                Swal.fire('Advertencia', 'Por favor, ingresa un nuevo rol', 'warning');
             }
         });
     });
