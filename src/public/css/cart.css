@@ -62,6 +62,7 @@ nav {
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    justify-content: center;
 }
 .cartProducts ul {
     list-style-type: none;
@@ -69,6 +70,9 @@ nav {
     margin: 0;
 }
 .cartProducts li {
+    display: grid;
+    flex-direction: r;
+    grid-template-columns: 2fr 1fr 2fr 2fr;
     background-color: #444;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
@@ -79,7 +83,7 @@ nav {
     justify-content: space-between;
     align-items: center;
 }
-.cartProducts button {
+.product-button {
     background-color: #660096;
     border: none;
     color: white;
@@ -88,9 +92,47 @@ nav {
     cursor: pointer;
     transition: background-color 0.3s;
 }
-.cartProducts button:hover {
+.product-button:hover {
     background-color: #55007a;
 }
-.cartProducts button:focus {
+.product-button:focus {
     outline: none;
+}
+
+.removeAll-button {
+    display: flex;
+    width: 300px;
+    justify-content: center;
+    background-color: #660096;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.removeAll-button button:hover {
+    background-color: #55007a;
+}
+.removeAll-button button:focus {
+    outline: none;
+}
+
+.checkout-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #660096;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.checkout-button:hover {
+    background-color: #55007a;
 }

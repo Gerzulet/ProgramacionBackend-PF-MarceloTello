@@ -51,19 +51,20 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:cid", async (req, res) => {
-    const cartId = req.params.cid || req.cartId ;
+router.get('/:cid', async (req, res) => {
+    const cartId = req.params.cid 
 
     try {
         const cart = await CC.getById(cartId);
-
         if (!cart) {
             console.error("No se pudo encontrar el carrito con ID:", cartId);
             return res.status(404).json({ error: `No se encontró el carrito con ID ${cartId}` });
         }
-        //Solucion"own property" de handlebars y seguridad
+
+        const total = cart.products.reduce((sum, product) => sum + (product.product.price * product.quantity), 0);
+
         const cartData = JSON.parse(JSON.stringify(cart));
-        return res.render('cart', { cart: cartData });
+        return res.json({ cart: cart, total: total.toFixed(2) });
     } catch (error) {
         console.error("Error al obtener el carrito:", error);
         return res.status(500).send("Error interno del servidor");
@@ -98,7 +99,7 @@ router.delete('/:cid/product/:pid', async (req, res) => {
 });
 
 router.put('/:cid/products/:pid', async (req, res) => {
-    const cartId = req.params.cid || req.cartId ;
+    const cartId = req.params.cid || req.cartId;
     const productId = req.params.pid;
     const { quantity } = req.body;
 
@@ -136,7 +137,16 @@ router.delete('/:cid', async (req, res) => {
     }
 });
 
-router.post('/:cid/purchase', auth, isUser, async (req, res) => {
+router.delete('/', async (req,res) => {
+    try{
+        
+    } catch (error){
+        console.error("Error al eliminar usuarios con inactividad:", error);
+        res.status(500).send('Error al eliminar usuarios con inactividad');
+    }
+})
+
+router.post('/:cid/purchase', async (req, res) => {
     try {
         const cartId = req.params.cid || req.cartId ;
         const userEmail = req.user.email;

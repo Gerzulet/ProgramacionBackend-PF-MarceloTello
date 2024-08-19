@@ -1,0 +1,22 @@
+<div class="container">
+    <h1 class="title">Checkout de Compra</h1>
+    
+    <div class="cartProducts">
+        {{#if cart.products.length}}
+        <ul>
+            {{#each cart.products}}
+                <li>
+                    {{this.product.title}}: {{this.quantity}} x ${{this.product.price}} = ${{this.subtotal}}
+                </li>
+            {{/each}}
+        </ul>
+        <h3>Total: ${{cart.total}}</h3>
+        <button onclick="completePurchase()">Confirmar Compra</button>
+        <button onclick="cancelPurchase()">Cancelar</button>
+        {{else}}
+        <h2>No hay productos en el carrito</h2>
+        {{/if}}
+    </div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/checkout.js"></script>

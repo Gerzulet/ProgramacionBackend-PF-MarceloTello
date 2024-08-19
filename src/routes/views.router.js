@@ -143,11 +143,11 @@ router.get('/chat',auth, async (req,res) => {
 })
 
 router.get('/cart/:cid', async (req, res) => {
-    let cartId = req.params.cid || req.cartId 
+    let cartId = req.params.cid 
     try {
         let cart = await CC.getById(cartId);
         if (!cart) {
-            throw createError('CART_NOT_FOUND');
+            return res.status(404).send('carrito no encontrado');
         }
         res.render('cart', {
             cart,
@@ -155,8 +155,36 @@ router.get('/cart/:cid', async (req, res) => {
         });
     } catch (error) {
         console.error("Error al obtener el carrito", error);
-        const customError = createError(error.message || 'UNKNOWN_ERROR');
-        res.status(customError.statusCode).json({ error: customError.message });
+        res.status(500).json("No se pudo obtener el codigo , error del servidor");
+    }
+});
+
+router.get('/cart/:cid/checkout', async (req, res) => {
+    const cartId = req.params.cid
+    const user = req.user;
+
+    try {
+        let cart = await CC.getById(cartId);
+        if (!cart) {
+            return res.status(404).send('Carrito no encontrado');
+        }
+
+        // Calcula el subtotal de cada producto y el total general
+        cart.products.forEach(product => {
+            product.subtotal = product.quantity * product.product.price;
+        });
+        cart.total = cart.products.reduce((total, product) => total + product.subtotal, 0);
+
+        
+        res.render('checkout', { 
+            cart,
+            cartId,
+            user,
+            style: 'checkout.css'
+        });
+    } catch (error) {
+        console.error('Error al cargar la vista de checkout:', error);
+        res.status(500).send('Error al cargar la página de checkout');
     }
 });
 

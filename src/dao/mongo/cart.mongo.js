@@ -21,7 +21,6 @@ export default class CartService {
             console.log('Product ID:', productId);
             console.log('Quantity:', quantity);
     
-            // Verificar si el producto existe en la base de datos
             const product = await productModel.findById(productId);
             if (!product) {
                 console.error(`El producto con ID ${productId} no existe`);
@@ -30,7 +29,6 @@ export default class CartService {
     
             console.log('Product found:', product);
     
-            // Intentar incrementar la cantidad del producto en el carrito si ya existe
             const result = await cartModel.updateOne(
                 { _id: cartId, 'products.product': productId },
                 { $inc: { 'products.$.quantity': quantity } }

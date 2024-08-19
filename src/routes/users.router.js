@@ -37,8 +37,7 @@ router.get('/githubcallback',passport.authenticate('github',{failureRedirect: '/
 
 router.get('/current', auth, async (req, res) => {
     try {
-        const uid = req.user._id
-        const user = await UC.getById(uid);
+        const user = req.user;
         if (user) {
             const userDTO = new UserDTO(user);
             res.json(userDTO);
@@ -139,11 +138,14 @@ router.post('/reset-password/:token', async (req, res) => {
     }
 });
 
-router.get('/', auth, isAdmin, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const users = await UC.getAll();
-        if (users) {
-            const usersDTO = new UserDTO(users);
+
+        if (users && users.length > 0) {
+
+            const usersDTO = users.map(user => new UserDTO(user));
+
             res.json(usersDTO);
         } else {
             res.status(404).json({ message: 'Usuarios no encontrados' });

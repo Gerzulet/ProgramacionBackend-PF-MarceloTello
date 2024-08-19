@@ -14,13 +14,17 @@
         {{#if cart.products.length}}
         <ul>
             {{#each cart.products}}
-                <li>{{this.product.title}}: {{this.quantity}}
-                    <button onclick="updateQuantity('{{this.product._id}}')">Actualizar Cantidad</button>
-                    <button onclick="removeProduct('{{this.product._id}}')">Eliminar</button>
+                <li>
+                    {{this.product.title}}: {{this.quantity}}
+                    <input type="number" min="1" max="{{this.product.stock}}" value="{{this.quantity}}" id="quantity-{{this.product._id}}">
+                    <button class="product-button" onclick="updateQuantity('{{this.product._id}}')">Actualizar Cantidad</button>
+                    <button class="product-button" onclick="removeProduct('{{this.product._id}}')">Eliminar</button>
                 </li>
             {{/each}}
         </ul>
-        <button onclick="removeAllProducts()">Eliminar Todos los Productos</button>
+        <button class="removeAll-button" onclick="removeAllProducts()">Eliminar Todos los Productos</button>
+        <hr>
+        <a href="/cart/{{cart._id}}/checkout" class="checkout-button">Avanzar a la Compra</a>
         {{else}}
         <h2>No hay productos en el carrito</h2>
         {{/if}}

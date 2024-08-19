@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const cartId = getCartIdURL() ? getCartIdURL() : user.cartId;
-    const cartContainer = document.querySelector('.container');
+
 
     try {
         const response = await fetch(`/api/carts/${cartId}`);
@@ -9,44 +9,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const cart = await response.json();
+        let total = 0;
 
-        if (cart && cart.products.length > 0) {
-            const productList = document.createElement('ul');
-            cart.products.forEach(product => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${product.product.title}: ${product.quantity}`;
+        console.log(cart);
 
-                const removeButton = document.createElement('button');
-                removeButton.textContent = 'Eliminar';
-                removeButton.addEventListener('click', async () => {
-                    await removeProductFromCart(product.product._id);
-                    
-                });
-                listItem.appendChild(removeButton);
-
-                productList.appendChild(listItem);
-            });
-            cartContainer.appendChild(productList);
-
-            // Botón para eliminar todos los productos
-            const removeAllButton = document.createElement('button');
-            removeAllButton.textContent = 'Eliminar todos';
-            removeAllButton.addEventListener('click', async () => {
-                await removeAllProductsFromCart();
-                
-            });
-            cartContainer.appendChild(removeAllButton);
-        } else {
-            const message = document.createElement('h2');
-            message.textContent = 'No hay productos en el carrito';
-            cartContainer.appendChild(message);
-        }
     } catch (error) {
         console.error('Error al obtener el carrito:', error);
     }
 });
 
-async function removeProductFromCart(productId) {
+async function updateQuantity(productId) {
+    const quantityInput = document.getElementById(`quantity-${productId}`);
+    const newQuantity = parseInt(quantityInput.value, 10);
+
+    if (isNaN(newQuantity) || newQuantity < 1) {
+        alert('Cantidad inválida');
+        return;
+    }
+
+    try {
+        const cartId = getCartIdURL();
+        const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ quantity: newQuantity })
+        });
+        if (!response.ok) {
+            throw new Error('Error al actualizar la cantidad del producto');
+        }
+        console.log('Cantidad del producto actualizada exitosamente');
+        location.reload(); // Recargar la página para actualizar la vista del carrito
+    } catch (error) {
+        console.error('Error al actualizar la cantidad del producto:', error);
+    }
+}
+
+async function removeProduct(productId) {
     try {
         const cartId = getCartIdURL();
         const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
@@ -56,12 +56,13 @@ async function removeProductFromCart(productId) {
             throw new Error('Error al eliminar el producto del carrito');
         }
         console.log('Producto eliminado del carrito exitosamente');
+        location.reload(); // Recargar la página para actualizar la vista del carrito
     } catch (error) {
         console.error('Error al eliminar el producto del carrito:', error);
     }
 }
 
-async function removeAllProductsFromCart() {
+async function removeAllProducts() {
     try {
         const cartId = getCartIdURL();
         const response = await fetch(`/api/carts/${cartId}`, {
@@ -71,6 +72,7 @@ async function removeAllProductsFromCart() {
             throw new Error('Error al eliminar todos los productos del carrito');
         }
         console.log('Todos los productos eliminados del carrito exitosamente');
+        location.reload(); // Recargar la página para actualizar la vista del carrito
     } catch (error) {
         console.error('Error al eliminar todos los productos del carrito:', error);
     }
@@ -80,4 +82,4 @@ function getCartIdURL() {
     const url = window.location.href;
     const parts = url.split('/');
     return parts[parts.length - 1]; // Devuelve la última parte de la URL, que debería ser el cartId
-} 
+}

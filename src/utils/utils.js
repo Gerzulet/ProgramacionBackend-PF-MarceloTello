@@ -10,7 +10,7 @@ const PRIVATE_KEY = "CoderKeySecretShhh";
 const generateToken = (user) => {
     const token = jwt.sign(
         { user,
-          createdAt: new Date.now()  
+          createdAt: Date.now()  
         },
         PRIVATE_KEY,
         { expiresIn: "1h" }
