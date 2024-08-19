@@ -2,6 +2,12 @@
 
 export default class UserService {
 
+    async create(user) {
+        const result = await userModel.create(user);
+
+        return result;
+    }
+
     async getAll() {
         return await userModel.find();
     }
@@ -14,9 +20,15 @@ export default class UserService {
         return result;
     }
 
-    async create(user) {
-        const result = await userModel.create(user);
+    async updateRole(uid, newRole) {
+        const updatedUser = await UserModel.findByIdAndUpdate(uid, { role }, { new: true });
+        return updatedUser;
+    }
+
+    async delete(uid) {
+        const result = await userModel.deleteOne({_id: uid})
 
         return result;
     }
+
 }

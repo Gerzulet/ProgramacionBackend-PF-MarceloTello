@@ -6,6 +6,7 @@ const EErrors = {
     PRODUCT_ADD_FAILED: { message: 'Error al agregar producto', statusCode: 500 },
     PRODUCT_UPDATE_FAILED: { message: 'Error al actualizar producto', statusCode: 500 },
     PRODUCT_DELETE_FAILED: { message: 'Error al eliminar producto', statusCode: 500 },
+    PRODUCT_MOCKS_ERROR: { message: 'Error desconocido al cargar mockingproducts', statusCode: 500},
     //Usuarios
     USER_NOT_FOUND: { message: 'Usuario no encontrado', statusCode: 404 },
     USER_NOT_AUTHORIZED: { message: 'Usuario no autorizado', statusCode: 403 },
@@ -17,6 +18,9 @@ const EErrors = {
     USER_NOT_PROVIDED: { message: 'No se ha proporcionado un usuario', statusCode: 400 },
     INCORRECT_PASSWORD: { message: 'Contraseña incorrecta', statusCode: 401 },
     CREDENTIALS_INCORRECT: { message: 'Credenciales incorrectas', statusCode: 401 },
+    USER_DELETE_FAILED: { message: 'Error al eliminar los usuarios', statusCode: 500},
+    USER_UPDATE_ROLE_FAILED: { message: 'Error al actualizar el rol del usuario', statusCode: 500 },
+    INVALID_ROLE: { message: 'Rol invalido', statusCode:401},
     //Mensajes
     MESSAGE_ADD_FAILED: { message: 'Error al agregar mensaje', statusCode: 500 },
     MESSAGE_GET_ALL_FAILED: { message: 'Error al obtener todos los mensajes', statusCode: 500 },    

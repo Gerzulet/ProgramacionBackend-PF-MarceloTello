@@ -64,4 +64,60 @@ export default class UserController {
             })
         }
     }
+
+    async updateRole(uid, newRole) {
+
+        try {
+            if (!['user'|| 'admin'|| 'premium'].includes(newRole)) {
+                throw new CustomError({
+                    name: "Rol Inválido",
+                    cause: generateUserErrorInfo({ role: newRole }),
+                    message: EErrors.INVALID_ROLE.message,
+                    code: EErrors.INVALID_ROLE.statusCode
+                });
+            }
+
+            const user = await userModel.findById(uid);
+            if (!user) {
+                throw new CustomError({
+                    name: "Usuario No Encontrado",
+                    cause: generateUserErrorInfo({ uid }),
+                    message: EErrors.USER_NOT_FOUND.message,
+                    code: EErrors.USER_NOT_FOUND.statusCode
+                });
+            }
+
+
+            const updatedUser = await this.userService.updateUserRole(uid, newRole);
+            return updatedUser;
+        } catch (error) {
+            throw CustomError.createError({
+                name: "Error al actualizar el rol del usuario",
+                message: EErrors.USER_UPDATE_ROLE_FAILED.message,
+                code: EErrors.USER_UPDATE_ROLE_FAILED.statusCode
+            });
+        }
+    }
+
+    async delete(uid) {
+
+        if(!uid){
+            CustomError.createError({
+                name:"Faltan campos obligatorios",
+                cause:generateUserErrorInfo({first_name,last_name,age,email}),
+                message:EErrors.MISSING_REQUIRED_FIELDS.message,
+                code:EErrors.MISSING_REQUIRED_FIELDS.statusCode
+            });
+        }
+
+        try {
+            return await this.userService.deleteUser(uid);
+        } catch (error) {
+            throw CustomError.createError({
+                name:"Error al eliminar usuario",
+                message:EErrors.USER_DELETE_FAILED.message,
+                code:EErrors.USER_DELETE_FAILED.statusCode
+            })
+        }
+    }
 }

@@ -4,6 +4,8 @@ import __dirname from '../utils/utils.js';
 import ProductController from '../controllers/productController.js';
 import productModel from '../dao/mongo/models/productModel.js';
 import CartController from '../controllers/cartController.js';
+import UserController from '../controllers/userController.js';
+import UserDTO from '../dao/DTOs/user.dto.js';
 import { generateProducts } from '../utils/utilsmock.js';
 import EErrors from '../services/errors/EErrors.js';
 import CustomError from '../services/errors/CustomError.js';
@@ -11,10 +13,12 @@ import CustomError from '../services/errors/CustomError.js';
 import { auth, logged, isAdmin, isUser } from '../middlewares/auth.js'
 import { generateProductErrorInfo } from '../services/errors/info.js';
 
+
 const router = express.Router();
 
 const PC = new ProductController();
 const CC = new CartController();
+const UC = new UserController();
 
 router.get('/', auth, async (req, res) => {
     let { page = 1, limit = 10, sortField, sortOrder, query } = req.query;
@@ -58,21 +62,39 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
-router.get("/profile", auth, (req, res) => {
+router.get('/profile', (req, res) => {
     try {
-        res.render(
-            'index',
-            {
-                title: 'Perfil',
-                style: 'user.css',
-                user: req.session.user
-            }
-        )
-    } catch(e){
-        console.error('Error al cargar el perfil', e);
-        res.status(500).send("Error al cargar el perfil en el servidor");
+        if (req.isAuthenticated()) {
+            res.render('profile', { 
+                user: req.user,
+                style: 'profile.css' 
+            });
+        } else {
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.error("Error al cargar el perfil del Usuario");
+        res.status(500).send('Error del Servidor al cargar el perfil del usuario', error);
     }
-}); 
+});
+
+router.get('/manageruser',auth, isAdmin, async (req,res) => {
+    try{
+        const users = await UC.getAll();
+        if (users) {
+            const usersDTO = users.map(user => new UserDTO(user));
+            res.render('managerUsers', {
+                users: usersDTO,
+                style: 'managerUsers.css'
+            });
+        } else {
+            res.status(404).json({ message: 'Usuarios no encontrados' });
+        }
+    } catch (error) {
+        console.error("Error al cargar todos los usuarios")
+        res.status(500).send('Error del Servidor al cargar los usuarios', error);
+    }
+})
 
 router.get('/realtimeproducts', auth, isAdmin, async (req, res) => {
     try {
@@ -87,7 +109,7 @@ router.get('/realtimeproducts', auth, isAdmin, async (req, res) => {
     }
 });
 
-router.get('/mockingproducts', auth, isUser, async (req, res) => {
+router.get('/mockingproducts', auth, isAdmin, async (req, res) => {
     try {
         const products = generateProducts();
         res.status(200).json(products);
@@ -95,8 +117,8 @@ router.get('/mockingproducts', auth, isUser, async (req, res) => {
         console.error("Error al generar productos de prueba", error);
         const customError = CustomError.createError({
             name: 'Error al generar productos de prueba',
-            message: EErrors.UNKNOWN_ERROR.message,
-            statusCode: EErrors.UNKNOWN_ERROR.statusCode
+            message: EErrors.PRODUCT_MOCKS_ERROR.message,
+            statusCode: EErrors.PRODUCT_MOCKS_ERROR.statusCode
         });
         res.status(customError.statusCode).json({ error: customError.message });
     }
@@ -114,13 +136,13 @@ router.get('/deleteproduct', auth, isAdmin, async (req, res) => {
     });
 });
 
-router.get('/chat', async (req,res) => {
+router.get('/chat',auth, async (req,res) => {
     res.render('chat', {
         style: 'chat.css'
     });
 })
 
-router.get('/cart/:cid', auth, isUser, async (req, res) => {
+router.get('/cart/:cid', async (req, res) => {
     let cartId = req.params.cid || req.cartId 
     try {
         let cart = await CC.getById(cartId);
@@ -129,7 +151,7 @@ router.get('/cart/:cid', auth, isUser, async (req, res) => {
         }
         res.render('cart', {
             cart,
-            style: '../../css/index.css'
+            style: '../../css/cart.css'
         });
     } catch (error) {
         console.error("Error al obtener el carrito", error);
@@ -177,7 +199,6 @@ router.get('/reset-password/:token', (req, res) => {
     });
 });
   
-
 router.get("/notFound", (req, res) => {
     res.render(
         'notFound',

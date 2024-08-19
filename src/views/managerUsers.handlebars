@@ -1,0 +1,19 @@
+<div class="container">
+    <h1 class="title">Gestión de Usuarios</h1>
+    <div class="userList">
+        {{#each users}}
+        <div class="userCard">
+            <p><strong>Nombre:</strong> {{this.full_name}}</p>
+            <p><strong>Email:</strong> {{this.email}}</p>
+            <div class="roleSection">
+                <p><strong>Rol actual:</strong> {{this.role}}</p>
+                <input type="text" class="newRoleInput" placeholder="Nuevo rol" />
+                <button class="changeRoleButton" data-userid="{{this._id}}">Cambiar Rol</button>
+            </div>
+            <button class="deleteUserButton" data-userid="{{this._id}}">Eliminar Usuario</button>
+        </div>
+        {{/each}}
+    </div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/managerUsers.js"></script>

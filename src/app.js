@@ -61,9 +61,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../public'));
 app.use(cookieParser());
 
-app.use(addLogger);  
-app.use(errorHandler);
-
 app.use(session({
     store: MongoStore.create({
         mongoUrl: config.mongo_url,
@@ -78,7 +75,11 @@ app.use(session({
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(getCartId);
+
+app.use(addLogger);
+app.use(getCartId);  
+app.use(errorHandler);
+
 
 // Routers
 app.use('/', viewsRouter);

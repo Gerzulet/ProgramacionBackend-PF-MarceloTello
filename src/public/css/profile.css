@@ -6,7 +6,7 @@ body {
 
 nav {
     display: flex;
-    padding: 0 20px 20px 20px;
+    padding: 10px 20px 0 20px;
     justify-content: center;
 }
 .buttonNav {
@@ -38,6 +38,7 @@ nav {
     grid-template-columns: 1fr;
     justify-content: center;
     align-items: center;
+    background-color: rgb(49, 49, 49);
     padding-bottom: 20px;
 }
 .container .title {
@@ -50,47 +51,49 @@ nav {
 }
 .container h2 {
     font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     text-align: center;
+    color: white;
 }
 
-.cartProducts {
-    width: 80%;
-    margin: 0 auto;
-    background-color: #2a2a2a;
-    color: white;
-    border-radius: 10px;
+.containerInfo {
+    display:flex;
+    flex-direction: column;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-.cartProducts ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+.containerInfo p {
+    color: #ffffff;
+    font-size: 14px;
+    font-family: 'Open Sans',sans-serif;
 }
-.cartProducts li {
-    background-color: #444;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+
+hr {
+    width: 100%;
 }
-.cartProducts button {
-    background-color: #660096;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
+
+
+a {
     cursor: pointer;
-    transition: background-color 0.3s;
+    color: #ffffff;
+    transition: color 1s;
+    font-family: 'Open Sans', sans-serif;
+    text-decoration: none;
 }
-.cartProducts button:hover {
-    background-color: #55007a;
+
+
+.btn {
+    cursor: pointer;
+    margin-top: 5px;
+    color: white;
+    background-color: #4f0074;
+    border-radius: 6px;
+    border: 1px solid;
+    padding: 5px;
+    transition: background-color 1s;
+    font-family: 'Open Sans', sans-serif;
+    align-self: center;
 }
-.cartProducts button:focus {
-    outline: none;
+.btn:hover {
+    background-color: rgb(162, 0, 255);
 }
+

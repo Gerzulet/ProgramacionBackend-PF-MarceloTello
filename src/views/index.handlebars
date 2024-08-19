@@ -1,22 +1,37 @@
 <div class="container">
     {{#if user}}
-        <h2>Bienvenido {{user.first_name}} {{user.last_name}}</h2>
-        {{#if user.cartId}}
-        <div class="buttonCart">
-            <a href="/cart/{{user.cartId}}">Mi Carrito</a>
-        </div>
-        {{/if}}
-    {{else}}
-        <h2>Bienvenido Invitado</h2>
-        <div class="buttonCart">
-            <a href="/cart/{{user.cartId}}">Mi Carrito</a>
+        <div class="containerWelcome">
+            <h2>Bienvenido {{user.first_name}} {{user.last_name}}</h2>
         </div>
 
+        {{#if user.cartId}}
+            <nav>
+                <div class="buttonNav">
+                    <a href="/cart/{{user.cartId}}">Mi Carrito</a>
+                </div>
+                <div class="buttonNav">
+                    <a href="/profile">Perfil</a>
+                </div>
+            </nav>
+        {{/if}}
+    {{else}}
+        <h2 class="containerWelcome">Bienvenido Invitado</h2>
+        <nav>
+            <div class="buttonNav">
+                <a href="/cart/{{user.cartId}}">Mi Carrito</a>
+            </div>
+            <div class="buttonNav">
+                <a href="/login">Iniciar Sesion</a>
+            </div>
+        </nav>
     {{/if}}
+
 <div class="container">
     <h1 class="title">Productos</h1>
+
     {{#if isValid}}
         <ul class="productList">
+
             {{#each products}}
             <div class="product">
                 <h3>{{title}}</h3>
@@ -27,7 +42,9 @@
             </div>
             {{/each}}
         </ul>
+
         <hr>
+        
         <div class="buttonsPag">
             <div class="buttonPaginate">
                 {{#if hasPrevPage}}
@@ -44,4 +61,5 @@
         <h2>No hay productos para mostrar</h2>
     {{/if}}
 </div>
-<script src="/js/index.js"></script>
+<script src="/js/index.js">
+</script>

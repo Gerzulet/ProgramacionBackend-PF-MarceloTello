@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const cartId = getCartIdURL();
+    const cartId = getCartIdURL() ? getCartIdURL() : user.cartId;
     const cartContainer = document.querySelector('.container');
 
     try {
@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const listItem = document.createElement('li');
                 listItem.textContent = `${product.product.title}: ${product.quantity}`;
 
-                // Botón para eliminar el producto
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Eliminar';
                 removeButton.addEventListener('click', async () => {

@@ -1,0 +1,33 @@
+<div class="container">
+    <h1 class="title">Usuario</h1>
+    <nav>
+        <div class="buttonNav">
+            <a href="/cart/{{user.cartId}}">Mi Carrito</a>
+        </div>
+        <div class="buttonNav">
+            <a href="/">Productos</a>
+        </div>
+    </nav>
+    {{#if user}}
+        <div class="containerInfo">
+            <h2>Información del Usuario</h2>
+            <p><strong>Nombre:</strong> {{user.first_name}} {{user.last_name}}</p>
+            <p><strong>Correo Electrónico:</strong> {{user.email}}</p>
+            <p><strong>Edad:</strong> {{user.age}}</p>
+        </div>
+        <div class="containerInfo">
+            <h2>Detalles del Carrito</h2>
+            {{#if user.cartId}}
+                <p><strong>ID del Carrito:</strong> {{user.cartId}}</p>
+            {{else}}
+                <p>No se ha asignado ningún carrito.</p>
+            {{/if}}
+        </div>
+        <div class="containerInfo">
+            <a href="/logout" class="btn btn-primary">Cerrar sesión</a>
+        </div>
+    {{else}}
+        <p>No estás autenticado. Por favor, inicia sesión para ver tu perfil.</p>
+    {{/if}}
+</div>
+

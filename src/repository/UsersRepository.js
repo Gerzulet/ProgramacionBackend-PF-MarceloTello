@@ -17,5 +17,13 @@ export default class UserRepository {
         const newUser = new UserDTO(user);
         return await this.dao.create(newUser);
     }
+
+    async updateUserRole(uid, role) {
+        return await this.dao.updateRole(uid, role);
+    }
+
+    async deleteUser(uid) {
+        return await this.dao.delete(uid);
+    }
 }
 

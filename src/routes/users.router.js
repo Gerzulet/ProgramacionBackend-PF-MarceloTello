@@ -69,6 +69,22 @@ router.post('/premium/:uid', auth, isAdmin, async (req, res) => {
     }
 });
 
+router.delete('/:uid', auth, isAdmin, async (req, res) => {
+    try {
+        const userId = req.params.uid;
+        const result = await UC.delete(userId);  
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        res.status(200).json({ message: 'Usuario eliminado correctamente' });
+    } catch (error) {
+        console.error('Error al eliminar usuario:', error);
+        res.status(500).json({ message: 'Error al eliminar el usuario' });
+    }
+});
+
 router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
 
@@ -116,5 +132,25 @@ router.post('/reset-password/:token', async (req, res) => {
         return res.status(400).send('Token inválido o expirado');
     }
 });
+
+
+router.get('/', auth, isAdmin, async (req, res) => {
+    try {
+        const users = await UC.getAll();
+        if (users) {
+            const usersDTO = new UserDTO(users);
+            res.json(usersDTO);
+        } else {
+            res.status(404).json({ message: 'Usuarios no encontrados' });
+        }
+    } catch (error) {
+        console.error('Error al obtener los usuarios:', error);
+        res.status(500).json({ message: 'Error al obtener los usuarios' });
+    }
+});
+
+
+
+
 
 export default usersRouter;

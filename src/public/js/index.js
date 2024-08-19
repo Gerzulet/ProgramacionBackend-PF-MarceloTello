@@ -1,5 +1,5 @@
-document.addEventListener('DOMContentLoaded', (req, res) => {
-    let cartId = localStorage.getItem('cartId');
+document.addEventListener('DOMContentLoaded', () => {
+    let cartId = user.cartId  || localStorage.getItem('cartId');
     
 
     if (!cartId) {
