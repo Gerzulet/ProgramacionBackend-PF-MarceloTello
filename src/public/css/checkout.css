@@ -53,6 +53,8 @@ nav {
 }
 
 .cartProducts li {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     background-color: #444;
     font-size: 15px;
     border-radius: 5px;

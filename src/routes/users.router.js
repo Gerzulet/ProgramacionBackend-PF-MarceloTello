@@ -36,6 +36,19 @@ router.get('/githubcallback',passport.authenticate('github',{failureRedirect: '/
     res.redirect('/');
 })
 
+router.post('/logout', async (req, res) => {
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error al destruir la sesión:', err);
+                return res.status(500).json({ message: 'Error al cerrar sesión' });
+            }
+            res.redirect('/login');
+        });
+    });
+});
+
 router.get('/current', auth, async (req, res) => {
     try {
         const user = req.user;
@@ -146,6 +159,8 @@ router.delete('/', async (req, res) => {
         // Calcula la fecha de inactividad
         const cutoffDate = new Date();
         cutoffDate.setDate(cutoffDate.getDate() - 2);
+
+
 
         const usersToDelete = await User.find({ lastLogin: { $lt: cutoffDate } }).exec();
         

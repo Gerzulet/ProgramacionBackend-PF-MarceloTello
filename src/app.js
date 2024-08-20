@@ -25,6 +25,7 @@ import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 import swaggerUiExpress from 'swagger-ui-express'
+import swaggerJSDoc from 'swagger-jsdoc';
 import cluster from 'cluster';
 import { cpus } from 'os';
 
@@ -79,7 +80,6 @@ app.use(passport.session());
 app.use(addLogger);
 app.use(getCartId);  
 app.use(errorHandler);
-
 
 // Routers
 app.use('/', viewsRouter);

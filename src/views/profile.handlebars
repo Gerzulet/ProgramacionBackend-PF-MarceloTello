@@ -23,9 +23,9 @@
                 <p>No se ha asignado ningún carrito.</p>
             {{/if}}
         </div>
-        <div class="containerInfo">
-            <a href="/logout" class="btn btn-primary">Cerrar sesión</a>
-        </div>
+        <form class="containerInfo" action="/api/sessions/logout" method="POST">
+            <button type="submit">Cerrar Sesión</button>
+        </form>
     {{else}}
         <p>No estás autenticado. Por favor, inicia sesión para ver tu perfil.</p>
     {{/if}}

@@ -16,7 +16,7 @@ const swaggerOptions = {
             }
         ]
     },
-    apis:[`${__dirname}./docs/**/*.yaml`]
+    apis:[`${__dirname}../../docs/**/*.yaml`]
 };
 
 const specs = swaggerJSDoc(swaggerOptions);

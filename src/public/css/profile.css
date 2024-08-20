@@ -71,7 +71,6 @@ hr {
     width: 100%;
 }
 
-
 a {
     cursor: pointer;
     color: #ffffff;
@@ -81,7 +80,7 @@ a {
 }
 
 
-.btn {
+button {
     cursor: pointer;
     margin-top: 5px;
     color: white;
@@ -93,7 +92,7 @@ a {
     font-family: 'Open Sans', sans-serif;
     align-self: center;
 }
-.btn:hover {
+button:hover {
     background-color: rgb(162, 0, 255);
 }
 

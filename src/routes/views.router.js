@@ -150,6 +150,7 @@ router.get('/cart/:cid', async (req, res) => {
             return res.status(404).send('carrito no encontrado');
         }
         res.render('cart', {
+            user: req.session.user,
             cart,
             style: '../../css/cart.css'
         });
@@ -160,8 +161,12 @@ router.get('/cart/:cid', async (req, res) => {
 });
 
 router.get('/cart/:cid/checkout', async (req, res) => {
-    const cartId = req.params.cid
-    const user = req.user;
+    const cartId = req.params.cid;
+    const user = req.session.user; 
+
+    if (!user) {
+        return res.redirect('/login'); 
+    }
 
     try {
         let cart = await CC.getById(cartId);
@@ -175,11 +180,10 @@ router.get('/cart/:cid/checkout', async (req, res) => {
         });
         cart.total = cart.products.reduce((total, product) => total + product.subtotal, 0);
 
-        
         res.render('checkout', { 
             cart,
             cartId,
-            user,
+            user: req.session.user,
             style: 'checkout.css'
         });
     } catch (error) {

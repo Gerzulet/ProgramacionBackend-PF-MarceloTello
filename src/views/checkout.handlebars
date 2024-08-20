@@ -6,7 +6,7 @@
         <ul>
             {{#each cart.products}}
                 <li>
-                    {{this.product.title}}: {{this.quantity}} x ${{this.product.price}} = ${{this.subtotal}}
+                    <div>{{this.product.title}}</div> <div>${{this.product.price}}</div><div>{{this.quantity}}</div> <div>${{this.subtotal}}</div> 
                 </li>
             {{/each}}
         </ul>
@@ -19,4 +19,4 @@
     </div>
 </div>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/js/checkout.js"></script>
+<script src="/js/checkout.js"> </script>

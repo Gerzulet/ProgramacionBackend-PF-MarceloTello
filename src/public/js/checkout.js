@@ -1,7 +1,12 @@
-async function completePurchase(req,res) {
+async function completePurchase() {
     try {
         const cartId = getCartIdURL();
-        const user = req.user;
+
+        const user = typeof req !== 'undefined' && req.session && req.session.user;
+
+        if (!user) {
+            throw new Error('Usuario no encontrado. No se puede completar la compra.');
+        }
 
         const response = await fetch(`/api/carts/${cartId}/purchase`, {
             method: 'POST',
@@ -44,7 +49,6 @@ async function completePurchase(req,res) {
     }
 }
 
-
 function cancelPurchase() {
     Swal.fire({
         title: '¿Estás seguro?',
@@ -56,14 +60,6 @@ function cancelPurchase() {
         confirmButtonText: 'Sí, cancelar compra',
         cancelButtonText: 'No, continuar comprando'
     }).then((result) => {
-        //Funcion para rescatar el id hacia la derecha con la URL
-        function getCartIdURL1() {
-            const url = window.location.href;
-            const parts = url.split('/');
-            const cartIdIndex = parts.indexOf('cart') + 1;
-            return parts[cartIdIndex];
-        }
-
         if (result.isConfirmed) {
             const cartId = getCartIdURL1(); 
             window.location.href = `/cart/${cartId}`; 
@@ -71,9 +67,17 @@ function cancelPurchase() {
     });
 }
 
-//Funcion para obtener URL de la izquierda
+// Función para obtener el ID del carrito desde la URL (último segmento de la URL)
 function getCartIdURL() {
     const url = window.location.href;
     const parts = url.split('/');
     return parts[parts.length - 1];
+}
+
+// Función auxiliar para obtener el ID del carrito de otra manera si es necesario
+function getCartIdURL1() {
+    const url = window.location.href;
+    const parts = url.split('/');
+    const cartIdIndex = parts.indexOf('cart') + 1;
+    return parts[cartIdIndex];
 }
