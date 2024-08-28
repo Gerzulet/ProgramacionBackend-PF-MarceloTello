@@ -1,12 +1,23 @@
-async function completePurchase() {
+document.addEventListener('DOMContentLoaded', async (req, res) => {
+    const user = req.user;
+
     try {
-        const cartId = getCartIdURL();
+        console.log(user); 
+    } catch (error) {
+        console.error('Error al obtener el carrito:', error);
+    }
+});
 
-        const user = typeof req !== 'undefined' && req.session && req.session.user;
+async function completePurchase(req,res) {
+    const user = req.user;
+    console.log(user);
 
+    try {
         if (!user) {
-            throw new Error('Usuario no encontrado. No se puede completar la compra.');
+            throw new Error('Usuario no autenticado.');
         }
+
+        const cartId = getCartIdURL();
 
         const response = await fetch(`/api/carts/${cartId}/purchase`, {
             method: 'POST',
@@ -67,14 +78,12 @@ function cancelPurchase() {
     });
 }
 
-// Función para obtener el ID del carrito desde la URL (último segmento de la URL)
 function getCartIdURL() {
     const url = window.location.href;
     const parts = url.split('/');
     return parts[parts.length - 1];
 }
 
-// Función auxiliar para obtener el ID del carrito de otra manera si es necesario
 function getCartIdURL1() {
     const url = window.location.href;
     const parts = url.split('/');

@@ -30,6 +30,7 @@ import cluster from 'cluster';
 import { cpus } from 'os';
 
 
+
 const app = express();
 
 // MongoDB connect
@@ -41,11 +42,12 @@ mongoose.connection.on('error', (err) => {
     logger.error('Error de conexión a MongoDB:', err);
 });
 
-// Handlebars Config
 const hbs = exphbs.create({
     defaultLayout: 'main',
     helpers: {
-        // tus helpers personalizados
+        json: function (context) {
+            return JSON.stringify(context);
+        }
     },
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
@@ -78,7 +80,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(addLogger);
-app.use(getCartId);  
+app.use(getCartId);
 app.use(errorHandler);
 
 // Routers
@@ -100,22 +102,3 @@ const io = new Server(httpServer);
 
 websocket(io);
 
-// //Cluster
-// const numeroDeProcesadores = cpus().length;
-// if(cluster.isPrimary){
-//     console.log("Proceso primario, generando proceso trabajador");
-//     for( let i= 0; i<numeroDeProcesadores;i++){
-//         cluster.fork()
-//     }
-// } else {
-//     console.log("Al ser un proceso forkeado, no cuento como primario, por lo tanto isPrimary=false. Entonces soy un worker")
-//     console.log(`Worker con id:${process.pid} `)
-
-//     const app = express();
-
-//     app.get('/', (req,res) => {
-//         res.send({status:"sucess", message:"Peticion atendida por un proceso worker"})
-//     })
-
-//     app.listen(8080,() => console.log("Listening on 8080"))
-// }

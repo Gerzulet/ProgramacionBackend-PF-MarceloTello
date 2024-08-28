@@ -11,7 +11,7 @@ import EErrors from '../services/errors/EErrors.js';
 import CustomError from '../services/errors/CustomError.js';
 
 import { auth, logged, isAdmin, isUser } from '../middlewares/auth.js'
-import { generateProductErrorInfo } from '../services/errors/info.js';
+
 
 
 const router = express.Router();
@@ -53,8 +53,7 @@ router.get('/', auth, async (req, res) => {
             products: result.docs,
             style: 'index.css',
             ...result,
-            user: req.session.user,
-            cartId: req.session.user.cartId
+            user: req.user,
         });
     } catch (error) {
         console.error("Error al obtener productos", error);
@@ -62,7 +61,7 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
-router.get('/profile', (req, res) => {
+router.get('/profile', auth, async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             res.render('profile', { 
@@ -162,11 +161,8 @@ router.get('/cart/:cid', async (req, res) => {
 
 router.get('/cart/:cid/checkout', async (req, res) => {
     const cartId = req.params.cid;
-    const user = req.session.user; 
+    const user = req.session.user
 
-    if (!user) {
-        return res.redirect('/login'); 
-    }
 
     try {
         let cart = await CC.getById(cartId);
@@ -174,7 +170,6 @@ router.get('/cart/:cid/checkout', async (req, res) => {
             return res.status(404).send('Carrito no encontrado');
         }
 
-        // Calcula el subtotal de cada producto y el total general
         cart.products.forEach(product => {
             product.subtotal = product.quantity * product.product.price;
         });
@@ -183,7 +178,7 @@ router.get('/cart/:cid/checkout', async (req, res) => {
         res.render('checkout', { 
             cart,
             cartId,
-            user: req.session.user,
+            user: req.user,
             style: 'checkout.css'
         });
     } catch (error) {
